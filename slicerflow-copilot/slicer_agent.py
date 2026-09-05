@@ -250,6 +250,11 @@ class SlicerLiveAgent:
             print(intent.unsupported_reason)
             return False
 
+        # Handle general conversation & Q&A queries naturally without creating a workflow plan
+        if intent.intent in ("general_conversation", "qa", "general_query") or not intent.operations:
+            print(f"\n[🤖 SlicerFlow Copilot]:\n{intent.explanation}\n")
+            return True
+
         # 2. Plan
         case_id = os.path.splitext(os.path.basename(active_case))[0] if active_case else "CASE_001"
         planner = WorkflowPlanner()

@@ -665,11 +665,11 @@ class MyModuleWidget(ScriptedLoadableModuleWidget):
         idx = self.engine_combo.currentIndex
         meta_dict = self.active_metadata.to_dict() if self.active_metadata else None
 
-        if idx == 0:  # Qwen 3.8
-            self.llm_client.model = os.getenv("LLM_MODEL", "Qwen-Ambassador/Qwen3.8-Max")
+        if idx == 0:  # Gemini 3.6 Flash
+            self.llm_client.model_name = os.getenv("LLM_MODEL", "models/gemini-3.6-flash")
             intent = self.llm_client.parse_workflow(text, case_metadata=meta_dict)
-        elif idx == 1:  # DeepSeek-V3.1
-            self.llm_client.model = "deepseek-ai/DeepSeek-V3.1"
+        elif idx == 1:  # Gemini 2.0 Flash
+            self.llm_client.model_name = "gemini-2.0-flash"
             intent = self.llm_client.parse_workflow(text, case_metadata=meta_dict)
         else:  # Offline rule parser
             intent = RuleBasedParser.parse(text, context=meta_dict)
@@ -682,6 +682,14 @@ class MyModuleWidget(ScriptedLoadableModuleWidget):
             )
             self.btn_approve_exec.setEnabled(False)
             self.btn_view_script.setEnabled(False)
+            return
+
+        # Handle general conversation & Q&A queries naturally without generating a workflow plan
+        if intent.intent in ("general_conversation", "qa", "general_query") or not intent.operations:
+            self._append_agent_message(
+                f"<b>SlicerFlow Copilot</b>:<br>{intent.explanation}",
+                reasoning=intent.reasoning
+            )
             return
 
         # Build workflow plan
