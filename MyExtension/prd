@@ -1,0 +1,975 @@
+# Product Requirements Document (PRD)
+
+## Product Name
+
+# SlicerFlow Copilot
+
+### From Natural Language to Verified and Reproducible 3D Medical Imaging Workflows
+
+---
+
+## 1. Product Overview
+
+SlicerFlow Copilot is an AI-assisted workflow automation system built around 3D Slicer.
+
+The system enables users to describe a medical imaging task using natural language. The AI Copilot converts the request into a structured workflow, validates the requested operations, executes supported steps through 3D Slicer automation, verifies the output of each step, and generates a reproducible case-processing record.
+
+The product is designed as a clinical imaging workflow and research prototype.
+
+### Core Product Flow
+
+User Intent
+↓
+AI Copilot
+↓
+Structured Workflow Plan
+↓
+Command and Parameter Validation
+↓
+Pipeline Orchestrator
+↓
+3D Slicer Execution
+↓
+Step-by-Step Verification
+↓
+Output Generation
+↓
+Reproducibility Manifest and Case Report
+
+---
+
+# 2. Problem Statement
+
+Medical imaging case preparation can involve multiple repetitive steps, including:
+
+* Importing imaging data
+* Inspecting DICOM metadata
+* Selecting the appropriate imaging series
+* Loading the selected volume
+* Resampling or preprocessing the image
+* Performing segmentation
+* Generating 3D models
+* Exporting processed outputs
+
+In a traditional workflow, the user may manually navigate through multiple 3D Slicer modules and configure each processing step.
+
+This creates several challenges:
+
+* Repetitive manual workflows
+* Inconsistent processing between cases
+* Incorrect series selection
+* Human configuration errors
+* Limited workflow reproducibility
+* Difficulty tracking parameters used during processing
+* Limited automated validation of intermediate outputs
+* Time spent navigating multiple tools and modules
+
+Existing automation can execute predefined scripts, but a fixed script may not understand the user's intent or adapt its workflow based on the case.
+
+SlicerFlow Copilot addresses this gap by introducing a layer that:
+
+1. Understands the user's requested task.
+2. Converts the request into supported structured operations.
+3. Validates the workflow before execution.
+4. Automates supported 3D Slicer operations.
+5. Verifies outputs after each major step.
+6. Records the complete workflow for reproducibility.
+
+---
+
+# 3. Product Vision
+
+## Vision Statement
+
+> Transform medical imaging case preparation from a sequence of manual software operations into a natural-language-driven, verified, and reproducible workflow.
+
+The long-term vision is to create a Copilot-style interaction layer for medical imaging workflows where:
+
+* The user describes the intended task.
+* The system generates a transparent execution plan.
+* The underlying medical imaging platform performs the operations.
+* Independent validation checks each result.
+* The user remains responsible for review and approval.
+
+---
+
+# 4. Target Users
+
+## Primary Users
+
+### Medical Imaging Researchers
+
+Users who process CT, MRI, and other medical imaging datasets and require reproducible workflows.
+
+### Biomedical Engineering Students and Researchers
+
+Users experimenting with segmentation, 3D reconstruction, and medical image processing.
+
+### Medical AI Developers
+
+Developers who need a structured interface for preparing imaging data and automating preprocessing pipelines.
+
+### 3D Slicer Users
+
+Users who perform repetitive workflows and want a simplified automation layer.
+
+---
+
+## Secondary Users
+
+* Radiology researchers
+* Surgical planning researchers
+* Medical image analysis teams
+* Academic laboratories
+* Healthcare technology developers
+
+---
+
+# 5. Product Goals
+
+## Primary Goals
+
+### Goal 1 — Natural Language Workflow Creation
+
+Allow the user to describe supported imaging tasks using natural language.
+
+Example:
+
+> "Load this abdominal CT, prepare the image, segment the selected anatomy, and generate a 3D model."
+
+The system should convert the request into a structured execution plan.
+
+---
+
+### Goal 2 — Verified Workflow Automation
+
+Execute supported 3D Slicer operations automatically while validating the result of each major step.
+
+---
+
+### Goal 3 — Reproducibility
+
+Automatically record:
+
+* Input information
+* Selected series
+* Processing steps
+* Parameters
+* Execution status
+* Validation results
+* Generated outputs
+
+---
+
+### Goal 4 — Transparent AI
+
+The AI must not silently execute unrestricted operations.
+
+Before execution, the system should generate a structured and visible workflow plan.
+
+Example:
+
+```text
+Proposed Workflow
+
+1. Inspect case
+2. Select CT series
+3. Load volume
+4. Preprocess image
+5. Segment selected anatomy
+6. Generate 3D model
+7. Validate output
+8. Export results
+```
+
+---
+
+### Goal 5 — Reliable Execution
+
+The system should validate commands before execution and validate outputs after execution.
+
+---
+
+# 6. Non-Goals
+
+The hackathon MVP will NOT attempt to:
+
+* Replace radiologists or clinicians
+* Diagnose diseases
+* Provide autonomous clinical decisions
+* Perform medical procedures
+* Support every 3D Slicer module
+* Automate every medical imaging workflow
+* Train custom deep-learning models from scratch
+* Support unrestricted AI-generated code execution
+* Claim clinical safety or regulatory approval
+
+The system is a research and workflow automation prototype.
+
+---
+
+# 7. Core User Journey
+
+## Step 1 — Select Medical Imaging Case
+
+The user selects a supported imaging case.
+
+Supported formats may include:
+
+* DICOM
+* NIfTI
+* Supported sample datasets
+
+---
+
+## Step 2 — Case Inspection
+
+The system analyzes available metadata.
+
+Example:
+
+```text
+Case Analysis
+
+Modality: CT
+Available Series: 4
+Image Dimensions: Available
+Voxel Spacing: Available
+```
+
+---
+
+## Step 3 — User Provides a Natural Language Request
+
+Example:
+
+> "Prepare this CT scan and generate a 3D model of the selected structure."
+
+---
+
+## Step 4 — AI Generates Structured Workflow
+
+The AI does not directly execute arbitrary commands.
+
+Instead:
+
+Natural Language
+↓
+Intent Extraction
+↓
+Structured Workflow
+
+Example:
+
+```json
+{
+  "intent": "prepare_case",
+  "modality": "CT",
+  "operations": [
+    "inspect_case",
+    "select_series",
+    "load_volume",
+    "preprocess",
+    "segment",
+    "generate_model",
+    "validate",
+    "export"
+  ]
+}
+```
+
+---
+
+## Step 5 — Command Validation
+
+The system validates:
+
+* Is the requested operation supported?
+* Is the modality compatible?
+* Are required inputs available?
+* Are required parameters valid?
+* Does the requested workflow match the available case?
+
+Example:
+
+```text
+Request:
+Segment Liver
+
+Detected Case:
+Brain MRI
+
+Result:
+BLOCKED
+
+Reason:
+Requested anatomy/workflow is incompatible with the detected case configuration.
+```
+
+---
+
+## Step 6 — User Reviews Workflow
+
+The user sees the proposed workflow.
+
+The workflow should be visible and understandable before execution.
+
+Example:
+
+```text
+Proposed Pipeline
+
+✓ Inspect Case
+✓ Select Series
+✓ Load Volume
+✓ Preprocess
+✓ Segment
+✓ Generate 3D Model
+✓ Validate
+✓ Export
+```
+
+---
+
+## Step 7 — Pipeline Execution
+
+The Pipeline Orchestrator sends supported instructions to 3D Slicer.
+
+Example:
+
+```text
+Pipeline Orchestrator
+        ↓
+3D Slicer Python API
+        ↓
+Medical Imaging Modules
+```
+
+---
+
+## Step 8 — Step-by-Step Verification
+
+After each operation:
+
+```text
+EXECUTE
+   ↓
+VERIFY
+   ↓
+PASS?
+  /   \
+YES    NO
+↓      ↓
+NEXT   STOP + REPORT
+```
+
+---
+
+## Step 9 — Results
+
+The user receives:
+
+* Processed medical image
+* Segmentation output
+* 3D model
+* Exported files
+* Pipeline status
+* Validation results
+* Reproducibility manifest
+* Case-processing report
+
+---
+
+# 8. Core Features
+
+## Feature 1 — Case Analyzer
+
+The Case Analyzer inspects the input data.
+
+### Responsibilities
+
+* Detect supported file types
+* Inspect DICOM metadata
+* Detect imaging modality
+* Identify available series
+* Extract relevant metadata
+* Identify missing or invalid inputs
+
+### Priority
+
+MVP Essential
+
+---
+
+# Feature 2 — AI Copilot
+
+The AI Copilot converts supported natural-language requests into structured workflow instructions.
+
+### Example Input
+
+> "Load the CT scan, segment the selected anatomy and generate a 3D model."
+
+### Example Output
+
+```json
+{
+  "intent": "prepare_case",
+  "operations": [
+    "load_volume",
+    "segment",
+    "generate_model"
+  ]
+}
+```
+
+### Requirements
+
+The Copilot must:
+
+* Produce structured output
+* Use supported commands only
+* Avoid arbitrary code execution
+* Provide an explanation of the generated workflow
+
+### Priority
+
+MVP Essential
+
+---
+
+# Feature 3 — Workflow Planner
+
+The Workflow Planner converts validated instructions into an executable sequence.
+
+Example:
+
+```text
+inspect_case()
+select_series()
+load_volume()
+preprocess()
+segment()
+generate_model()
+validate()
+export()
+```
+
+### Priority
+
+MVP Essential
+
+---
+
+# Feature 4 — Pipeline Orchestrator
+
+The Pipeline Orchestrator manages execution.
+
+### Responsibilities
+
+* Execute workflow steps in sequence
+* Track step status
+* Handle failures
+* Stop unsafe or invalid workflows
+* Pass outputs between steps
+
+### Step States
+
+```text
+PENDING
+RUNNING
+SUCCESS
+WARNING
+FAILED
+BLOCKED
+```
+
+### Priority
+
+MVP Essential
+
+---
+
+# Feature 5 — 3D Slicer Automation
+
+The system uses 3D Slicer's Python environment and supported modules to perform processing operations.
+
+Potential operations:
+
+* Load DICOM
+* Load volume
+* Resample volume
+* Preprocess image
+* Run segmentation
+* Generate 3D model
+* Save outputs
+
+### Priority
+
+MVP Essential
+
+---
+
+# Feature 6 — Verification Engine
+
+The Verification Engine independently checks whether workflow outputs satisfy configured requirements.
+
+## Input Validation
+
+Check:
+
+* Is the file readable?
+* Is the modality supported?
+* Is required metadata available?
+
+---
+
+## Series Validation
+
+Check:
+
+* Was a valid series selected?
+* Can the selected series be loaded?
+
+---
+
+## Segmentation Validation
+
+Check:
+
+* Does the segmentation output exist?
+* Is it empty?
+* Does its geometry correspond to the source image?
+* Are outputs within configured workflow expectations?
+
+---
+
+## Output Validation
+
+Check:
+
+* Was the model generated?
+* Was the file exported?
+* Can the output be reopened?
+
+### Priority
+
+MVP Essential
+
+---
+
+# Feature 7 — Reproducibility Manifest
+
+Every workflow should generate a machine-readable record.
+
+Example:
+
+```json
+{
+  "case_id": "CASE_001",
+  "input_type": "DICOM",
+  "modality": "CT",
+  "pipeline": "ct_preparation",
+  "steps": [
+    {
+      "name": "import",
+      "status": "success"
+    },
+    {
+      "name": "segmentation",
+      "status": "success"
+    }
+  ],
+  "validation": "passed"
+}
+```
+
+### Priority
+
+MVP Essential
+
+---
+
+# Feature 8 — Case Processing Report
+
+Generate a human-readable report.
+
+Example:
+
+```text
+CASE PROCESSING REPORT
+
+Case ID: CASE_001
+
+Input:
+CT Scan
+
+Workflow:
+
+✓ Case Inspection
+✓ Series Selection
+✓ Volume Loading
+✓ Preprocessing
+✓ Segmentation
+✓ Model Generation
+✓ Validation
+✓ Export
+
+Final Status:
+COMPLETED
+
+Outputs:
+Segmentation
+3D Model
+Workflow Manifest
+```
+
+### Priority
+
+Hackathon High Priority
+
+---
+
+# 9. System Architecture
+
+```text
+                   USER
+                     │
+                     ▼
+              WEB INTERFACE
+                 Streamlit
+                     │
+                     ▼
+              AI COPILOT
+       Natural Language → Plan
+                     │
+                     ▼
+             COMMAND VALIDATOR
+                     │
+                     ▼
+            WORKFLOW PLANNER
+                     │
+                     ▼
+          PIPELINE ORCHESTRATOR
+                     │
+                     ▼
+                 3D SLICER
+                     │
+        ┌────────────┼─────────────┐
+        ▼            ▼             ▼
+      Import    Segmentation    3D Model
+        │            │             │
+        └────────────┼─────────────┘
+                     ▼
+             VERIFICATION ENGINE
+                     │
+                     ▼
+          OUTPUT + CASE REPORT
+                     │
+                     ▼
+          REPRODUCIBILITY MANIFEST
+```
+
+---
+
+# 10. Technology Stack
+
+## Core Language
+
+Python
+
+---
+
+## Medical Imaging
+
+* 3D Slicer
+* SimpleITK
+* pydicom
+* NiBabel
+* NumPy
+
+---
+
+## AI and Structured Planning
+
+Hackathon options:
+
+* Rule-based natural language parsing for supported commands
+* Structured JSON command generation
+* Optional open-source LLM integration
+
+Important:
+
+The core pipeline must not depend on unrestricted AI code generation.
+
+---
+
+## Automation
+
+* Python
+* 3D Slicer Python API
+
+---
+
+## Visualization
+
+* 3D Slicer
+* Plotly
+
+---
+
+## User Interface
+
+Streamlit
+
+---
+
+## Validation
+
+Custom Python validators.
+
+---
+
+## Testing
+
+pytest
+
+---
+
+## Version Control
+
+Git and GitHub
+
+---
+
+# 11. Hackathon MVP Scope
+
+The hackathon version should focus on reliability rather than supporting every possible workflow.
+
+## Supported User Commands
+
+The MVP should support approximately five core actions.
+
+### Command 1
+
+> Load this case.
+
+### Command 2
+
+> Inspect this scan.
+
+### Command 3
+
+> Prepare the selected CT volume.
+
+### Command 4
+
+> Segment the selected anatomy.
+
+### Command 5
+
+> Generate and export a 3D model.
+
+---
+
+## MVP Demonstration Workflow
+
+```text
+User uploads/selects case
+        ↓
+System analyzes metadata
+        ↓
+User provides natural-language request
+        ↓
+AI generates structured plan
+        ↓
+System validates plan
+        ↓
+User reviews workflow
+        ↓
+Pipeline executes in 3D Slicer
+        ↓
+Every major step is verified
+        ↓
+3D output generated
+        ↓
+Results exported
+        ↓
+Manifest + report generated
+```
+
+---
+
+# 12. Key Differentiator
+
+The central product differentiator is:
+
+# Verified AI-Assisted Workflow Execution
+
+The system is not simply:
+
+> AI → Execute Command
+
+Instead:
+
+```text
+USER INTENT
+      ↓
+AI INTERPRETATION
+      ↓
+STRUCTURED PLAN
+      ↓
+COMMAND VALIDATION
+      ↓
+3D SLICER EXECUTION
+      ↓
+OUTPUT VERIFICATION
+      ↓
+PASS / WARNING / BLOCK
+      ↓
+REPRODUCIBLE REPORT
+```
+
+The AI proposes the workflow.
+
+The system validates the workflow.
+
+3D Slicer executes supported operations.
+
+The Verification Engine checks results.
+
+The human reviews the final output.
+
+---
+
+# 13. Success Metrics
+
+The MVP will be considered successful if it can demonstrate:
+
+### Workflow Automation
+
+* A supported workflow can be executed end-to-end.
+
+### Natural Language Interaction
+
+* A user can describe a supported task in natural language.
+
+### Structured Planning
+
+* The request is converted into a valid structured workflow.
+
+### Validation
+
+* Invalid commands or incompatible workflows are detected.
+
+### Verification
+
+* At least one major processing output is automatically validated.
+
+### Reproducibility
+
+* Every run produces a workflow manifest.
+
+### Demonstration Quality
+
+The system clearly demonstrates:
+
+Input → Intent → Plan → Validation → Execution → Verification → Output
+
+---
+
+# 14. Risks
+
+## Risk 1 — Over-Reliance on AI
+
+### Mitigation
+
+Use structured commands and schema validation.
+
+---
+
+## Risk 2 — Too Many Supported Workflows
+
+### Mitigation
+
+Support only a small number of polished workflows during the hackathon.
+
+---
+
+## Risk 3 — 3D Slicer Automation Complexity
+
+### Mitigation
+
+Use tested Python scripting examples and build one workflow at a time.
+
+---
+
+## Risk 4 — AI Hallucinated Commands
+
+### Mitigation
+
+Only allow commands from a predefined supported command registry.
+
+---
+
+## Risk 5 — Medical Safety Claims
+
+### Mitigation
+
+Clearly label the project as:
+
+> Research and workflow automation prototype. Outputs require qualified human review and are not intended for autonomous clinical decision-making.
+
+---
+
+# 15. Future Roadmap
+
+## Phase 1 — Hackathon MVP
+
+* Case analysis
+* Natural-language workflow input
+* Structured planning
+* Workflow validation
+* Basic 3D Slicer automation
+* Output verification
+* Case report
+
+---
+
+## Phase 2 — Portfolio MVP
+
+* More workflow templates
+* Better case-aware planning
+* More advanced validation
+* Full reproducibility tracking
+* Persistent case history
+* FastAPI backend
+* Improved user interface
+
+---
+
+## Phase 3 — Advanced Platform
+
+* More imaging modalities
+* More anatomy-specific workflows
+* AI-assisted quality assessment
+* Advanced segmentation integration
+* 3D Slicer extension
+* Multi-user research workflows
+* Workflow templates
+* Full audit history
+
+---
+
+# 16. Final Product Positioning
+
+## One-Sentence Description
+
+> SlicerFlow Copilot is an AI-assisted system that converts natural-language medical imaging tasks into structured, verified, and reproducible 3D Slicer workflows.
+
+## Hackathon Pitch
+
+> Medical imaging platforms provide powerful tools, but preparing a case often requires navigating multiple modules and manually configuring repetitive steps. SlicerFlow Copilot allows users to describe a supported imaging task in natural language, automatically generates a transparent workflow, executes it through 3D Slicer, verifies each major output, and produces a reproducible processing record.
+
+## Core Philosophy
+
+> **AI understands. Rules validate. 3D Slicer executes. Verification checks. Humans approve.**

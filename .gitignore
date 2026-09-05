@@ -1,0 +1,18 @@
+# Environment secrets (Do NOT commit secret API keys)
+.env
+*.env.local
+
+# Python cache & test output
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+outputs/
+*.log
+
+# PyInstaller build cache and output bundles (prevents GitHub 100MB file limit errors)
+build/
+dist/
+
+# Upstream 3D Slicer source tree clone
+Slicer-main/

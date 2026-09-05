@@ -1,0 +1,8 @@
+{
+  "extraPaths": [
+    "slicerflow-copilot",
+    "MyExtension/MyModule",
+    "."
+  ],
+  "reportMissingImports": "none"
+}
