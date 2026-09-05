@@ -1,37 +1,19 @@
-"""Segmentation technical validator."""
-
-from typing import Tuple, Any
+"""Segmentation validator for medical image segmentation masks."""
+from typing import Tuple
 import numpy as np
 
 
 class SegmentationValidator:
-    """Verifies segmentation mask non-emptiness and spatial compatibility."""
-
     @classmethod
-    def validate(cls, mask_data: Any, reference_volume: Any = None) -> Tuple[bool, str]:
-        if mask_data is None:
+    def validate(cls, mask: np.ndarray, arr: np.ndarray) -> Tuple[bool, str]:
+        if mask is None:
             return False, "Segmentation mask is None."
-
-        if hasattr(mask_data, "GetSize"):
-            size = mask_data.GetSize()
-            if reference_volume and hasattr(reference_volume, "GetSize"):
-                if size != reference_volume.GetSize():
-                    return False, f"Segmentation dimension mismatch: mask {size} vs volume {reference_volume.GetSize()}."
-            return True, f"Segmentation verified with dimensions {size}."
-
-        if isinstance(mask_data, np.ndarray):
-            if mask_data.size == 0:
-                return False, "Segmentation mask is empty."
-            voxel_count = int(np.sum(mask_data > 0))
-            if voxel_count == 0:
-                return False, "Segmentation mask contains 0 segmented voxels (empty mask)."
-
-            if reference_volume is not None and isinstance(reference_volume, np.ndarray):
-                if mask_data.shape != reference_volume.shape:
-                    return False, f"Mask shape {mask_data.shape} does not match volume shape {reference_volume.shape}."
-
-            total_voxels = mask_data.size
-            percentage = (voxel_count / total_voxels) * 100.0
-            return True, f"Segmentation verified: {voxel_count} voxels ({percentage:.2f}% of volume)."
-
-        return False, f"Unrecognized segmentation mask type: {type(mask_data)}"
+        if mask.size == 0:
+            return False, "Segmentation mask is empty."
+        if np.sum(mask) == 0:
+            return False, "Segmentation mask has no segmented voxels."
+        if mask.shape != arr.shape:
+            return False, f"Segmentation mask shape {mask.shape} does not match volume shape {arr.shape}."
+        if not np.isfinite(mask).all():
+            return False, "Segmentation mask contains non-finite values."
+        return True, "Segmentation mask is valid."

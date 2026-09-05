@@ -216,7 +216,8 @@ class PipelineOrchestrator:
             v_ok, v_msg = VolumeValidator.validate(ctx["volume_array"])
             checks.append(f"Volume: {'PASS' if v_ok else 'FAIL'} ({v_msg})")
         if "segmentation_mask" in ctx:
-            s_ok, s_msg = SegmentationValidator.validate(ctx["segmentation_mask"])
+            arr = ctx.get("volume_array")
+            s_ok, s_msg = SegmentationValidator.validate(ctx["segmentation_mask"], arr)
             checks.append(f"Segmentation: {'PASS' if s_ok else 'FAIL'} ({s_msg})")
         if "mesh_stats" in ctx:
             m_ok, m_msg = OutputValidator.validate_mesh(ctx["mesh_stats"]["vertices_count"], ctx["mesh_stats"]["faces_count"])

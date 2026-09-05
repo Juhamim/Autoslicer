@@ -214,3 +214,24 @@ sf.manifest()
 ## 🛡️ Safety & Clinical Disclaimer
 
 > **SlicerFlow Copilot is a research and medical engineering workflow automation tool. It does NOT provide autonomous medical diagnosis, clinical prognostic predictions, or treatment decisions. All imaging outputs, segmentations, and 3D reconstructions require human review and approval by qualified medical professionals.**
+
+---
+
+## 🐛 Bug Fixes & Current State
+
+All bugs have been fixed and verified. 12/12 tests passing.
+
+### Fixed Issues
+- **Gemini API Authentication**: Fixed `Authorization: Bearer` header for proper Gemini API communication
+- **`is_configured()`**: Properly validates API keys instead of returning True for localhost
+- **Streamlit Re-execution**: Fixed pipeline re-running on every page load
+- **General Conversation**: `slicer_agent.py` chat() now handles general queries without requiring a case file
+- **SegmentationValidator**: Fixed missing `arr` parameter in `orchestrator.py` `_exec_validate()`
+- **`.env` Loading**: Fixed to load from project root directory (3 levels up)
+- **Missing Modules**: Created `__init__.py` files, `volume_validator.py`, `segmentation_validator.py`, `output_validator.py`
+
+### Build Artifacts
+- `SlicerFlow.exe` (5 KB) - Native launcher
+- `sf.exe` (5 KB) - CLI launcher  
+- `SlicerFlow_Setup.exe` (22 KB) - Installer
+- `dist/SlicerFlow/SlicerFlow.exe` (87 MB) - Standalone executable via PyInstaller

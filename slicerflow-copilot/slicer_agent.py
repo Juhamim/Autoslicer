@@ -195,17 +195,39 @@ class SlicerLiveAgent:
         return True
 
     def chat(self, user_query: str, case_path: Optional[str] = None, auto_execute: bool = False) -> bool:
-        """Process a natural language request directly with Qwen 3.8 / Rule Engine."""
+        """Process a natural language request directly with Gemini AI / Rule Engine."""
         print(f"\n[SlicerFlow Copilot] Received: '{user_query}'")
 
         if case_path:
             self.load(case_path)
 
+        # 1. AI Parse (Google Gemini AI with rule fallback) - do this FIRST for general queries
+        meta_dict = self.active_metadata.to_dict() if self.active_metadata else None
+        if self.llm_client.is_configured():
+            print(f"[*] Parsing with Google Gemini AI ({self.llm_client.model_name})...")
+            intent = self.llm_client.parse_workflow(user_query, case_metadata=meta_dict)
+        else:
+            print("[*] Parsing with SlicerFlow Deterministic Rule Engine...")
+            intent = RuleBasedParser.parse(user_query, context=meta_dict)
+
+        if intent.reasoning:
+            print(f"\n[🧠 AI Radiologist Reasoning]:\n{intent.reasoning}\n")
+
+        if not intent.is_supported:
+            print("\n[!] UNSUPPORTED REQUEST REJECTED:")
+            print(intent.unsupported_reason)
+            return False
+
+        # Handle general conversation & Q&A queries naturally without creating a workflow plan
+        if intent.intent in ("general_conversation", "qa", "general_query") or not intent.operations:
+            print(f"\n[🤖 SlicerFlow Copilot]:\n{intent.explanation}\n")
+            return True
+
+        # For workflow queries, a case file is required
         active_case = self.active_case
         if not isinstance(active_case, str):
             active_case = ""
 
-        # If in Slicer and no path given, check active volume node in scene
         if self.is_in_slicer and not active_case:
             import slicer
             first_vol = slicer.mrmlScene.GetFirstNodeByClass("vtkMRMLScalarVolumeNode")
@@ -229,31 +251,9 @@ class SlicerLiveAgent:
                 return False
 
         # Case metadata if available
-        meta_dict = self.active_metadata.to_dict() if self.active_metadata else None
         if not meta_dict and active_case and os.path.exists(active_case):
             self.active_metadata = CaseAnalyzer.analyze_case(active_case)
             meta_dict = self.active_metadata.to_dict()
-
-        # 1. AI Parse (Google Gemini AI with rule fallback)
-        if self.llm_client.is_configured():
-            print(f"[*] Parsing with Google Gemini AI ({self.llm_client.model_name})...")
-            intent = self.llm_client.parse_workflow(user_query, case_metadata=meta_dict)
-        else:
-            print("[*] Parsing with SlicerFlow Deterministic Rule Engine...")
-            intent = RuleBasedParser.parse(user_query, context=meta_dict)
-
-        if intent.reasoning:
-            print(f"\n[🧠 AI Radiologist Reasoning]:\n{intent.reasoning}\n")
-
-        if not intent.is_supported:
-            print("\n[!] UNSUPPORTED REQUEST REJECTED:")
-            print(intent.unsupported_reason)
-            return False
-
-        # Handle general conversation & Q&A queries naturally without creating a workflow plan
-        if intent.intent in ("general_conversation", "qa", "general_query") or not intent.operations:
-            print(f"\n[🤖 SlicerFlow Copilot]:\n{intent.explanation}\n")
-            return True
 
         # 2. Plan
         case_id = os.path.splitext(os.path.basename(active_case))[0] if active_case else "CASE_001"

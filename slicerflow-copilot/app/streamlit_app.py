@@ -11,9 +11,13 @@ import json
 from pathlib import Path
 import streamlit as st
 import numpy as np
+from dotenv import load_dotenv
+
+# Load .env from project root
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+load_dotenv(os.path.join(ROOT_DIR, ".env"))
 
 # Ensure root package is in python path
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
 
@@ -299,7 +303,7 @@ user_prompt = st.text_input("Enter natural language request for 3D Slicer automa
 
 btn_parse = st.button("Generate Workflow Plan", type="primary")
 
-if btn_parse or ("workflow_plan" not in st.session_state or st.session_state.workflow_plan is None):
+if btn_parse:
     with st.spinner("Translating natural language into validated structured workflow..."):
         if "Gemini" in llm_mode and api_key:
             client = ExternalLLMClient(api_key=api_key, base_url=base_url, model_name=model_name)
