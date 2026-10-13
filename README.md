@@ -1,5 +1,3 @@
-from pathlib import Path
-
 readme = r'''<div align="center">
 
 # 🧠 Slicer AI Copilot
@@ -9,7 +7,7 @@ readme = r'''<div align="center">
 **Natural language in. Validated actions out. Verified results.**
 
 <p align="center">
-  <img src="SlicerAICopilot.png" alt="Slicer AI Copilot" width="900">
+
 </p>
 
 [![3D Slicer](https://img.shields.io/badge/Platform-3D%20Slicer-005b87?style=for-the-badge&logo=3d-slicer&logoColor=white)](https://www.slicer.org/)
