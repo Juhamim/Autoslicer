@@ -1,0 +1,145 @@
+{
+  "examples": [
+    {
+      "user": "Hide the skin",
+      "scene": {"models": ["Skin", "Liver", "Tumor", "Portal Vein", "Vena Cava", "Bone"]},
+      "response": {
+        "version": "1.0",
+        "reply": "I'll hide the skin.",
+        "actions": [{"type": "HIDE", "target": "Skin"}]
+      }
+    },
+    {
+      "user": "Show the tumor",
+      "scene": {"models": ["Skin", "Liver", "Tumor", "Portal Vein"]},
+      "response": {
+        "version": "1.0",
+        "reply": "Showing the tumor.",
+        "actions": [{"type": "SHOW", "target": "Tumor"}]
+      }
+    },
+    {
+      "user": "Show only the tumor and vessels",
+      "scene": {"models": ["Skin", "Liver", "Tumor", "Portal Vein", "Vena Cava", "Bone", "Gallbladder"]},
+      "response": {
+        "version": "1.0",
+        "reply": "Showing only tumor and vessels.",
+        "actions": [{"type": "SHOW_ONLY", "targets": ["Tumor", "Portal Vein", "Vena Cava"]}]
+      }
+    },
+    {
+      "user": "Make the liver transparent",
+      "scene": {"models": ["Liver", "Tumor"]},
+      "response": {
+        "version": "1.0",
+        "reply": "Making the liver transparent.",
+        "actions": [{"type": "SET_OPACITY", "target": "Liver", "value": 0.3}]
+      }
+    },
+    {
+      "user": "Set tumor opacity to 80%",
+      "scene": {"models": ["Tumor"]},
+      "response": {
+        "version": "1.0",
+        "reply": "Setting tumor opacity to 80%.",
+        "actions": [{"type": "SET_OPACITY", "target": "Tumor", "value": 0.8}]
+      }
+    },
+    {
+      "user": "Make the tumor red",
+      "scene": {"models": ["Tumor", "Liver"]},
+      "response": {
+        "version": "1.0",
+        "reply": "Making the tumor red.",
+        "actions": [{"type": "SET_COLOR", "target": "Tumor", "color": [1.0, 0.0, 0.0]}]
+      }
+    },
+    {
+      "user": "Zoom to the tumor",
+      "scene": {"models": ["Tumor", "Liver"]},
+      "response": {
+        "version": "1.0",
+        "reply": "Zooming to the tumor.",
+        "actions": [{"type": "ZOOM_TO", "target": "Tumor"}]
+      }
+    },
+    {
+      "user": "Show the axial view",
+      "scene": {},
+      "response": {
+        "version": "1.0",
+        "reply": "Switching to axial view.",
+        "actions": [{"type": "AXIAL_VIEW"}]
+      }
+    },
+    {
+      "user": "Switch to 3D view",
+      "scene": {},
+      "response": {
+        "version": "1.0",
+        "reply": "Switching to 3D view.",
+        "actions": [{"type": "THREE_D_VIEW"}]
+      }
+    },
+    {
+      "user": "What structures are loaded?",
+      "scene": {"models": ["Liver", "Tumor", "Portal Vein"], "volumes": ["CT"]},
+      "response": {
+        "version": "1.0",
+        "reply": "Here are all loaded structures.",
+        "actions": [{"type": "LIST_OBJECTS"}]
+      }
+    },
+    {
+      "user": "What is currently visible?",
+      "scene": {"models": [{"name": "Liver", "visible": true}, {"name": "Tumor", "visible": true}, {"name": "Skin", "visible": false}]},
+      "response": {
+        "version": "1.0",
+        "reply": "Here are the visible structures.",
+        "actions": [{"type": "LIST_VISIBLE_OBJECTS"}]
+      }
+    },
+    {
+      "user": "Prepare this case for review",
+      "scene": {"models": ["Skin", "Liver", "Tumor", "Portal Vein", "Vena Cava", "Bone", "Gallbladder"], "volumes": ["CT"]},
+      "response": {
+        "version": "1.0",
+        "reply": "Preparing case for review: showing CT, tumor, and vessels; hiding skin and bone; setting liver transparent.",
+        "actions": [
+          {"type": "SHOW", "target": "CT"},
+          {"type": "SHOW_ONLY", "targets": ["Tumor", "Portal Vein", "Vena Cava"]},
+          {"type": "SET_OPACITY", "target": "Liver", "value": 0.3},
+          {"type": "THREE_D_VIEW"},
+          {"type": "ZOOM_TO", "target": "Tumor"}
+        ]
+      }
+    },
+    {
+      "user": "Hide everything except the tumor",
+      "scene": {"models": ["Skin", "Liver", "Tumor", "Portal Vein", "Bone"]},
+      "response": {
+        "version": "1.0",
+        "reply": "Showing only the tumor.",
+        "actions": [{"type": "SHOW_ONLY", "targets": ["Tumor"]}]
+      }
+    },
+    {
+      "user": "Reset the view",
+      "scene": {},
+      "response": {
+        "version": "1.0",
+        "reply": "Resetting the view.",
+        "actions": [{"type": "RESET_VIEW"}]
+      }
+    },
+    {
+      "user": "Center on the liver",
+      "scene": {"models": ["Liver", "Tumor"]},
+      "response": {
+        "version": "1.0",
+        "reply": "Centering on the liver.",
+        "actions": [{"type": "ZOOM_TO", "target": "Liver"}]
+      }
+    }
+  ]
+}

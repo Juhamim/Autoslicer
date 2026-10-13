@@ -1,0 +1,88 @@
+{
+  "actions": [
+    {
+      "type": "SHOW",
+      "description": "Make an object visible in the scene",
+      "parameters": {"target": "string - exact object name from scene"},
+      "examples": ["Show the tumor", "Show the liver", "Show the CT scan"]
+    },
+    {
+      "type": "HIDE",
+      "description": "Hide an object from view",
+      "parameters": {"target": "string - exact object name from scene"},
+      "examples": ["Hide the skin", "Hide the bones", "Hide the liver"]
+    },
+    {
+      "type": "SHOW_ONLY",
+      "description": "Show only specified objects, hide all others",
+      "parameters": {"targets": "array of strings - exact object names"},
+      "examples": ["Show only the tumor", "Show only tumor and vessels", "Hide everything except tumor"]
+    },
+    {
+      "type": "SET_OPACITY",
+      "description": "Set object transparency (0.0 = invisible, 1.0 = opaque)",
+      "parameters": {"target": "string", "value": "number 0.0-1.0"},
+      "examples": ["Make liver transparent", "Set tumor opacity to 80%", "Make skin semi-transparent"]
+    },
+    {
+      "type": "SET_COLOR",
+      "description": "Set object display color",
+      "parameters": {"target": "string", "color": "array [r,g,b] each 0.0-1.0"},
+      "examples": ["Make tumor red", "Color vessels blue", "Make liver green"]
+    },
+    {
+      "type": "RESET_DISPLAY",
+      "description": "Reset object to default visibility and opacity",
+      "parameters": {"target": "string"},
+      "examples": ["Reset liver display", "Reset tumor appearance"]
+    },
+    {
+      "type": "RESET_VIEW",
+      "description": "Reset 3D camera to default position",
+      "parameters": {},
+      "examples": ["Reset view", "Reset camera", "Default view"]
+    },
+    {
+      "type": "ZOOM_TO",
+      "description": "Zoom camera to center on an object",
+      "parameters": {"target": "string"},
+      "examples": ["Zoom to tumor", "Center on liver", "Focus on portal vein"]
+    },
+    {
+      "type": "THREE_D_VIEW",
+      "description": "Switch to 3D perspective view",
+      "parameters": {},
+      "examples": ["Show 3D view", "Switch to 3D", "3D view"]
+    },
+    {
+      "type": "AXIAL_VIEW",
+      "description": "Switch to axial (transverse) slice view",
+      "parameters": {},
+      "examples": ["Show axial view", "Axial slice", "Transverse view"]
+    },
+    {
+      "type": "SAGITTAL_VIEW",
+      "description": "Switch to sagittal slice view",
+      "parameters": {},
+      "examples": ["Show sagittal view", "Sagittal slice"]
+    },
+    {
+      "type": "CORONAL_VIEW",
+      "description": "Switch to coronal (frontal) slice view",
+      "parameters": {},
+      "examples": ["Show coronal view", "Coronal slice", "Frontal view"]
+    },
+    {
+      "type": "LIST_OBJECTS",
+      "description": "List all objects in the current scene",
+      "parameters": {},
+      "examples": ["What is loaded?", "List all objects", "Show scene contents"]
+    },
+    {
+      "type": "LIST_VISIBLE_OBJECTS",
+      "description": "List only currently visible objects",
+      "parameters": {},
+      "examples": ["What is visible?", "Show visible structures", "List visible objects"]
+    }
+  ]
+}

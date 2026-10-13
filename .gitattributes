@@ -1,0 +1,13 @@
+# Normalize line endings on checkin; preserve on checkout per-platform.
+# 3D Slicer runs on Windows, macOS and Linux, so pin text files explicitly.
+
+* text=auto
+
+*.py    text eol=lf
+*.md    text eol=lf
+*.txt   text eol=lf
+*.json  text eol=lf
+*.gitignore   text eol=lf
+*.gitattributes text eol=lf
+
+*.png   binary
