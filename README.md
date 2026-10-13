@@ -1,4 +1,4 @@
-readme = r'''<div align="center">
+<div align="center">
 
 # 🧠 Slicer AI Copilot
 
@@ -7,7 +7,7 @@ readme = r'''<div align="center">
 **Natural language in. Validated actions out. Verified results.**
 
 <p align="center">
-
+  <img src="SlicerAICopilot.png" alt="Slicer AI Copilot" width="900">
 </p>
 
 [![3D Slicer](https://img.shields.io/badge/Platform-3D%20Slicer-005b87?style=for-the-badge&logo=3d-slicer&logoColor=white)](https://www.slicer.org/)
@@ -15,9 +15,9 @@ readme = r'''<div align="center">
 [![Tests](https://img.shields.io/badge/Tests-101%20passing-2ea44f?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-7f3fbf?style=for-the-badge)](LICENSE)
 
-[Features](#-features) · [Quick Start](#-quick-start) · [Architecture](#-architecture) · [Safety](#-safety-and-privacy) · [Roadmap](#-roadmap)
+[Features](#-features) · [Quick Start](#-quick-start) · [Architecture](#-architecture) · [Safety](#-safety-and-privacy) · [Docs](#-documentation) · [Roadmap](#-roadmap)
 
-**Created by [Juhaim Mohammed MT](https://github.com/Juhamim)**
+**Created by [Juhaim Mohammed MT](https://github.com/Juhamim) · [Haleema Nasmila](https://github.com/haleemanasmila)**
 
 </div>
 
@@ -29,11 +29,11 @@ readme = r'''<div align="center">
 
 Instead of navigating multiple panels to adjust objects, display properties, and camera views, users can describe the result they want:
 
-- “Show only the tumor and the surrounding vessels.”
-- “Make the liver 30% opaque.”
-- “Zoom to the tumor and switch to 3D.”
-- “Show the axial view.”
-- “Which structures are currently visible?”
+- "Show only the tumor and the surrounding vessels."
+- "Make the liver 30% opaque."
+- "Zoom to the tumor and switch to 3D."
+- "Show the axial view."
+- "Which structures are currently visible?"
 
 The copilot reads the live scene, asks an LLM for a structured action plan, validates that plan, executes approved operations through trusted Python code, and checks the resulting scene state.
 
@@ -132,7 +132,7 @@ Provider presets:
 | Gemini | `https://generativelanguage.googleapis.com/v1beta/openai` | `gemini-2.5-flash` |
 | OpenAI | `https://api.openai.com/v1` | `gpt-4o` |
 
-Model availability may vary by account and region. Keep API keys private and never commit them to Git.
+Model availability may vary by account and region. Keep API keys private and never commit them to Git. A copyable template is provided in [`.env.example`](.env.example).
 
 ### 5. Import a case and start prompting
 
@@ -255,6 +255,8 @@ The project currently documents **101 passing tests**. Run the suite on your che
 | `test_file_manager.py` | File detection and DICOM grouping |
 | `test_llm_client.py` | Provider configuration and response parsing |
 
+> If `test_llm_client.py` fails with `TypeError: 'NoneType' object is not callable`, the `openai` package is missing from the interpreter running pytest. Install the requirements above. Inside 3D Slicer it is installed automatically when the module loads.
+
 ## 🗂️ Project Structure
 
 ```text
@@ -281,6 +283,18 @@ Autoslicer/
 ├── LICENSE
 └── README.md
 ```
+
+## 📄 Documentation
+
+Deeper documentation lives in [`docs/`](docs/):
+
+| Document | Contents |
+|---|---|
+| [`docs/architecture.md`](docs/architecture.md) | Layer contracts, component responsibilities, data contracts, action vocabulary |
+| [`docs/AI_INTEGRATION.md`](docs/AI_INTEGRATION.md) | LLM layer in depth: prompt construction, provider abstraction, validation gates, privacy surface, threading |
+| [`docs/REVERSE_ENGINEERING.md`](docs/REVERSE_ENGINEERING.md) | Line-level code analysis with ranked findings and a conformance table against `Agents.md` |
+| [`docs/demo.md`](docs/demo.md) | Step-by-step demonstration script with anticipated questions |
+| [`Agents.md`](Agents.md) | Project principles, boundaries, and contribution rules |
 
 ## 🧑‍💻 Developer API
 
@@ -349,13 +363,19 @@ Contributions, bug reports, and suggestions are welcome. Please read [`Agents.md
 
 For a new action, update the schema, allowlist, validator, action engine, verifier, prompts, knowledge catalogue, and tests. Keep the action set small, explicit, and testable.
 
-## 👨‍💻 Creator
+Add yourself to the [Contributors](#-creators--contributors) section when you open your first pull request.
 
-<div align="center">
+## 👥 Creators & Contributors
+
+<table>
+<tr>
+<td width="50%" align="center" valign="top">
+
+<img src="https://github.com/Juhamim.png" width="100px" alt="Juhaim Mohammed MT" />
 
 ### Juhaim Mohammed MT
 
-**Engineering Student · Cybersecurity · AI Systems · Full-Stack Development**
+**Creator · Engineering Student · Cybersecurity · AI Systems · Full-Stack Development**
 
 Building practical AI-powered systems with a focus on automation, security, and reliable software engineering.
 
@@ -363,7 +383,34 @@ Building practical AI-powered systems with a focus on automation, security, and 
 [![Autoslicer](https://img.shields.io/badge/Project-Autoslicer-333333?style=for-the-badge&logo=github)](https://github.com/Juhamim/Autoslicer)
 [![ThreatHunter AI](https://img.shields.io/badge/Project-ThreatHunter%20AI-333333?style=for-the-badge&logo=github)](https://github.com/Juhamim/threathunder-production)
 
-</div>
+</td>
+<td width="50%" align="center" valign="top">
+
+<img src="https://github.com/haleemanasmila.png" width="100px" alt="Haleema Nasmila" />
+
+### Haleema Nasmila
+
+**Co-Creator · Contributor · Data Analysis · Python · Machine Learning**
+
+Working on applied data analysis and forecasting systems, with an interest in turning data-science workflows into dependable, usable tools.
+
+[![GitHub](https://img.shields.io/badge/GitHub-haleemanasmila-181717?style=for-the-badge&logo=github)](https://github.com/haleemanasmila)
+[![AQI Analysis & Forecasting](https://img.shields.io/badge/Project-AQI%20Analysis%20%26%20Forecasting-333333?style=for-the-badge&logo=github)](https://github.com/haleemanasmila/AQI-Analysis-Forecasting)
+
+</td>
+</tr>
+</table>
+
+### How contributions are credited
+
+- **Creator** — original design and implementation of the module, architecture, and safety model.
+- **Co-Creator / Contributor** — ongoing development, review, documentation, and testing.
+
+Contributor statistics for this repository:
+
+<a href="https://github.com/Juhamim/Autoslicer/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Juhamim/Autoslicer" alt="Contributors" />
+</a>
 
 ## ⚕️ Medical Disclaimer
 
@@ -385,8 +432,3 @@ Built for hackathon challenge **N35 — Verified natural-language automation of 
 [Repository](https://github.com/Juhamim/Autoslicer) · [Issues](https://github.com/Juhamim/Autoslicer/issues)
 
 </div>
-'''
-path = Path("/mnt/data/README_CLEAN_COPY_PASTE.md")
-path.write_text(readme, encoding="utf-8")
-print(f"Created clean Markdown README: {path}\nLines: {len(readme.splitlines())}\nCharacters: {len(readme):,}")
-

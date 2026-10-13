@@ -50,7 +50,10 @@ class SlicerAICopilot(ScriptedLoadableModule):
         self.parent.title = "Slicer AI Copilot"
         self.parent.categories = ["Utilities", "AI"]
         self.parent.dependencies = []
-        self.parent.contributors = ["Slicer AI Copilot Team"]
+        self.parent.contributors = [
+            "Juhaim Mohammed MT (https://github.com/Juhamim)",
+            "Haleema Nasmila (https://github.com/haleemanasmila)",
+        ]
         self.parent.helpText = """
         <h3>Slicer AI Copilot</h3>
         Natural-language AI assistant for 3D Slicer.
