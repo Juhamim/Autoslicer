@@ -234,7 +234,7 @@ valid `type` but malformed fields fails to parse **before** validation is ever c
 
 > ⚠️ The file-I/O actions exist in the schema and the validator but are **absent from the system
 > prompt**, so the model is never told about them. They are currently unreachable via the chat path.
-> See [REVERSE_ENGINEERING.md §5](REVERSE_ENGINEERING.md#5-schema-vs-prompt-coverage-gap).
+> See [REVERSE_ENGINEERING.md §10.7](REVERSE_ENGINEERING.md#7-promptschema-coverage-gap).
 
 ---
 
