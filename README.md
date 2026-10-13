@@ -412,6 +412,8 @@ Contributor statistics for this repository:
   <img src="https://contrib.rocks/image?repo=Juhamim/Autoslicer" alt="Contributors" />
 </a>
 
+Full contribution history and guidelines: [`CONTRIBUTORS.md`](CONTRIBUTORS.md).
+
 ## ⚕️ Medical Disclaimer
 
 Slicer AI Copilot is a **research and education prototype**, not a medical device, and is not FDA-cleared. It must not be used for diagnosis, treatment selection, or clinical decision-making. It does not determine whether a segmentation is anatomically correct or make claims about a patient's condition. All medical interpretation remains the responsibility of qualified professionals.
